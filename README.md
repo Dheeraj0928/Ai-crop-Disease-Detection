@@ -585,31 +585,14 @@ Contributions are welcome! To contribute:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
----
 
-## 📄 License
-
-This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) file for details.
-
-**Copyright © 2022 George Muriithi Murage**
-
-### License Summary
-
-- ✅ You can use this project commercially
-- ✅ You can modify the code
-- ✅ You can distribute the code
-- ✅ You can use privately
-- ❌ Liability is not accepted
-- ❌ Warranty is not provided
-
----
 
 ## 👨‍💻 Author
 
-**George Muriithi Murage**
+**Dheeraj kumar yadav**
 
-- GitHub: [GitHub Profile](https://github.com)
-- Email: Contact via the Contact page
+- GitHub: [GitHub Profile]((https://github.com/Dheeraj0928))
+- Email: dk.2.yadav28@gmail.com
 
 ---
 
