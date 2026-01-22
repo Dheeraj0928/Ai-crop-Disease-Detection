@@ -4,6 +4,13 @@ A comprehensive full-stack web application that uses deep learning to detect and
 
 ---
 
+<img width="1868" height="863" alt="image" src="https://github.com/user-attachments/assets/95950fbb-7ea0-4cad-914d-c1090f9da6ba" />
+<img width="1790" height="858" alt="image" src="https://github.com/user-attachments/assets/1b8fbd88-da8d-417e-b2d9-32c38bd15c78" />
+<img width="1707" height="871" alt="image" src="https://github.com/user-attachments/assets/ead26caa-de85-4e71-aa9a-d923ba63d6a4" />
+<img width="1643" height="833" alt="image" src="https://github.com/user-attachments/assets/b9ba9e74-b849-4785-b4c2-464f647097a5" />
+<img width="1657" height="864" alt="image" src="https://github.com/user-attachments/assets/a33041d1-cf69-46eb-9281-43476e2f415e" />
+<img width="1879" height="721" alt="Screenshot (521)" src="https://github.com/user-attachments/assets/ec7c7acb-1910-49a3-9404-9ed04356ab41" />
+
 ## 📋 Table of Contents
 
 - [Overview](#overview)
