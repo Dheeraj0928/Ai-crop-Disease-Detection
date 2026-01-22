@@ -1,0 +1,17 @@
+Installing dependencies... 
+
+up to date, audited 1390 packages in 25s
+
+175 packages are looking for funding
+  run `npm fund` for details
+
+51 vulnerabilities (6 low, 15 moderate, 25 high, 5 critical)
+
+To address issues that do not require attention, run:
+  npm audit fix
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+Starting Web Page... 
