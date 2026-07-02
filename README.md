@@ -63,8 +63,8 @@ Production-quality deep learning pipeline for crop leaf disease classification u
 ### 1. Clone & install
 
 ```bash
-git clone https://github.com/Dheeraj0928/tomato-disease-detection.git
-cd tomato-disease-detection
+git clone https://github.com/Dheeraj0928/Ai-crop-Disease-Detection.git
+cd Ai-crop-Disease-Detection
 python -m venv venv
 venv\Scripts\activate        # Windows
 pip install -r requirements.txt
@@ -182,7 +182,7 @@ python -m compileall ml apis tests
 ## Author
 
 **Dheeraj Kumar Yadav**  
-GitHub: [@Dheeraj0928](https://github.com/Dheeraj0928)  
+GitHub: [@Dheeraj0928/Ai-crop-Disease-Detection](https://github.com/Dheeraj0928/Ai-crop-Disease-Detection)  
 Email: dk.2.yadav28@gmail.com
 
 ---
