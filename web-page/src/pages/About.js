@@ -1,60 +1,92 @@
 import React from 'react';
-import { Container, Typography, makeStyles, Grid, Paper } from '@material-ui/core';
+import { Typography, Paper, makeStyles } from '@material-ui/core';
+import PageLayout from '../components/PageLayout';
+import PageHeader from '../components/PageHeader';
+import { tokens } from '../theme';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: '60px 0',
-  },
-  title: {
-    fontWeight: 800,
-    marginBottom: '20px',
-    color: '#2c3e50',
-    textAlign: 'center',
+const useStyles = makeStyles(() => ({
+  card: {
+    padding: tokens.spacing.card,
+    borderRadius: tokens.radius.xl,
+    border: `1px solid ${tokens.colors.border}`,
+    boxShadow: tokens.shadow.md,
   },
   section: {
-    marginBottom: '40px',
+    marginBottom: 32,
+    '&:last-child': { marginBottom: 0 },
   },
-  card: {
-    padding: '30px',
-    borderRadius: '20px',
-    boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
-  }
+  sectionTitle: {
+    fontWeight: 700,
+    color: tokens.colors.primary,
+    marginBottom: 12,
+  },
+  body: {
+    lineHeight: 1.8,
+    color: tokens.colors.textSecondary,
+    fontSize: '1.05rem',
+  },
+  list: {
+    margin: 0,
+    paddingLeft: 0,
+    listStyle: 'none',
+    '& li': {
+      padding: '10px 0',
+      borderBottom: `1px solid ${tokens.colors.border}`,
+      color: tokens.colors.textSecondary,
+      lineHeight: 1.65,
+      '&:last-child': { borderBottom: 'none' },
+      '& strong': { color: tokens.colors.textPrimary },
+    },
+  },
 }));
+
+const SECTIONS = [
+  {
+    title: 'AI-Based Crop Disease Detection',
+    body: 'End-to-end CNN image classification using ResNet50 transfer learning (TensorFlow/Keras). The pipeline supports any folder-based crop disease dataset, GPU-accelerated training with data augmentation, and dropout/L2 regularization for field-ready generalization.',
+  },
+  {
+    title: 'Pipeline',
+    items: [
+      ['Preprocessing', 'OpenCV resize and normalize (256×256 RGB)'],
+      ['Model', 'ResNet50 backbone + dense head with dropout'],
+      ['Training', 'python -m ml.train --data /path/to/dataset'],
+      ['Evaluation', 'python -m ml.evaluate --data /path/to/dataset'],
+      ['Inference', 'python -m ml.predict --image leaf.jpg'],
+      ['API', 'FastAPI REST service + React web UI'],
+    ],
+  },
+  {
+    title: 'Impact',
+    body: 'Early disease detection helps reduce crop yield loss. Upload a leaf image and receive a predicted class with confidence scores in under a second.',
+  },
+];
 
 const About = () => {
   const classes = useStyles();
 
   return (
-    <Container maxWidth="md" className={classes.root}>
-      <Typography variant="h3" className={classes.title}>About The Project</Typography>
-      
-      <Paper className={classes.card}>
-        <div className={classes.section}>
-            <Typography variant="h5" gutterBottom style={{fontWeight: 700, color: '#27ae60'}}>Why Tomato Disease Detection?</Typography>
-            <Typography variant="body1" paragraph style={{lineHeight: 1.8, fontSize: '1.1rem', color: '#555'}}>
-                Tomato crops are vital for global food security, but they are highly susceptible to diseases like Bacterial Spot, Early Blight, and Late Blight. 
-                Early detection is crucial to prevent spread and minimize crop loss. Traditional manual diagnosis is time-consuming and requires expert knowledge that many farmers lack.
-            </Typography>
-        </div>
-
-        <div className={classes.section}>
-            <Typography variant="h5" gutterBottom style={{fontWeight: 700, color: '#27ae60'}}>How AI Helps</Typography>
-            <Typography variant="body1" paragraph style={{lineHeight: 1.8, fontSize: '1.1rem', color: '#555'}}>
-                This project allows the power of Deep Learning to solve this agricultural problem. By using a Convolutional Neural Network (CNN) trained on thousands of images of both healthy and diseased tomato leaves, our system can identify diseases with high accuracy in milliseconds.
-            </Typography>
-        </div>
-
-        <div className={classes.section}>
-            <Typography variant="h5" gutterBottom style={{fontWeight: 700, color: '#27ae60'}}>Technical Architecture</Typography>
-            <Typography variant="body1" paragraph style={{lineHeight: 1.8, fontSize: '1.1rem', color: '#555'}}>
-                • <b>Frontend:</b> React.js for a responsive and interactive user interface.<br/>
-                • <b>Backend:</b> FastAPI for high-performance model serving.<br/>
-                • <b>AI Model:</b> TensorFlow/Keras CNN model tailored for visual recognition tasks.<br/>
-                • <b>Deployment:</b> Designed for cloud scalability using Google Cloud Platform (GCP).
-            </Typography>
-        </div>
+    <PageLayout maxWidth="md" id="main-content">
+      <PageHeader
+        title="About The Project"
+        subtitle="Production ML pipeline for crop leaf disease classification"
+      />
+      <Paper className={classes.card} elevation={0}>
+        {SECTIONS.map((s) => (
+          <section key={s.title} className={classes.section}>
+            <Typography variant="h5" component="h2" className={classes.sectionTitle}>{s.title}</Typography>
+            {s.body && <Typography className={classes.body}>{s.body}</Typography>}
+            {s.items && (
+              <ul className={classes.list}>
+                {s.items.map(([k, v]) => (
+                  <li key={k}><strong>{k}:</strong> {v}</li>
+                ))}
+              </ul>
+            )}
+          </section>
+        ))}
       </Paper>
-    </Container>
+    </PageLayout>
   );
 };
 

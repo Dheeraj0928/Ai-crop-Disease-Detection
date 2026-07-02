@@ -1,46 +1,49 @@
-# importing packages
-from google.cloud import storage
+import sys
+from pathlib import Path
+
 import tensorflow as tf
-import numpy as np
-from PIL import Image
+from google.cloud import storage
 
-model = None  # declaring model
-BUCKET_NAME = 'tf-models-1'  # declaring gcp bucket name
-# declaring class names
-class_names = ['Bacterial-spot', 'Early-blight', 'Healthy', 'Late-blight',
-               'Leaf-mold', 'Mosaic-virus', 'Septoria-leaf-spot', 'Yellow-leaf-curl-virus']
+ROOT = Path(__file__).resolve().parents[2]
+if str(ROOT) not in sys.path:
+    sys.path.insert(0, str(ROOT))
+
+from ml.classes import load_class_names  # noqa: E402
+from ml.logger import setup_logger  # noqa: E402
+from ml.inference import ModelClassMismatchError, format_prediction, validate_class_alignment  # noqa: E402
+from ml.preprocess import PreprocessError, bytes_to_model_input  # noqa: E402
+logger = setup_logger("crop_disease.gcf")
+
+model = None
+BUCKET_NAME = "crop-disease-models"
+CLASS_NAMES = load_class_names()
 
 
-# downloading model from gcp
-def download_blob(bucket_name, source_blob_name, destination_file_name):
-    storage_client = storage.Client()
-    bucket = storage_client.get_bucket(bucket_name)
-    blob = bucket.blob(source_blob_name)
-    blob.download_to_filename(destination_file_name)
+def download_blob(bucket_name: str, source: str, destination: str) -> None:
+    client = storage.Client()
+    bucket = client.bucket(bucket_name)
+    bucket.blob(source).download_to_filename(destination)
 
 
-# predicting image
 def predict(request):
     global model
-    if model is None:
-        download_blob(
-            BUCKET_NAME,
-            'models/tomato-disease-detection-model.h5',
-            '/tmp/tomato-disease-detection-model.h5'
-        )
-        model = tf.keras.models.load_model('/tmp/tomato-disease-detection-model.h5')
+    try:
+        if model is None:
+            path = "/tmp/crop-disease-model.h5"
+            download_blob(BUCKET_NAME, "models/crop-disease-model.h5", path)
+            model = tf.keras.models.load_model(path, compile=False)
+            logger.info("GCF model loaded")
 
-    img = request.files['file']
-    img_array = np.array(Image.open(img).convert('RGB').resize((256, 256)))  # converting image to numpy array
-    img_array = img_array / 255  # rescaling image
-    img_batch = tf.expand_dims(img_array, axis=0)  # creating image batch for prediction
-
-    # image prediction
-    pred = model.predict(img_batch)
-    pred_class = class_names[np.argmax(pred[0])]  # getting predicted class
-    pred_conf = round(100 * np.max(pred[0]), 2)  # getting prediction confidence
-
-    return {
-        'pred_class': pred_class,
-        'pred_conf': pred_conf
-    }
+        img_batch = bytes_to_model_input(request.files["file"].read())
+        pred = model.predict(img_batch, verbose=0)
+        validate_class_alignment(model, CLASS_NAMES)
+        result = format_prediction(pred[0], CLASS_NAMES)
+        return result
+    except PreprocessError as exc:
+        return {"error": str(exc)}, 400
+    except ModelClassMismatchError as exc:
+        logger.error("Class alignment error: %s", exc)
+        return {"error": "Model configuration error"}, 500
+    except Exception:
+        logger.exception("GCF prediction failed")
+        return {"error": "Prediction failed"}, 500

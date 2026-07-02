@@ -1,35 +1,48 @@
 import React from 'react';
 import { Container, Typography, Grid, makeStyles, Box } from '@material-ui/core';
+import { Link } from 'react-router-dom';
+import { tokens } from '../theme';
 
-const useStyles = makeStyles((theme) => ({
+const LINKS = [
+  { label: 'Home', to: '/' },
+  { label: 'Detect Disease', to: '/detect' },
+  { label: 'About', to: '/about' },
+  { label: 'How It Works', to: '/how-it-works' },
+  { label: 'Contact', to: '/contact' },
+];
+
+const useStyles = makeStyles(() => ({
   footer: {
-    background: '#2c3e50',
-    color: '#ecf0f1',
-    padding: '40px 0 20px',
+    background: tokens.colors.footer,
+    color: tokens.colors.footerText,
+    padding: '48px 0 24px',
     marginTop: 'auto',
   },
   heading: {
     fontWeight: 700,
-    marginBottom: '10px',
-    color: '#2ecc71',
+    marginBottom: 16,
+    color: '#6ee7b7',
+    fontSize: '1rem',
   },
   link: {
-    display: 'block',
-    color: '#bdc3c7',
+    color: tokens.colors.footerText,
     textDecoration: 'none',
-    marginBottom: '5px',
-    '&:hover': {
-      color: 'white',
-    },
+    padding: '6px 0',
+    minHeight: 44,
+    display: 'flex',
+    alignItems: 'center',
+    transition: `color ${tokens.transition}`,
+    '&:hover, &:focus-visible': { color: '#ffffff' },
   },
   copy: {
-    borderTop: '1px solid #34495e',
-    marginTop: '20px',
-    paddingTop: '20px',
+    borderTop: `1px solid #334155`,
+    marginTop: 32,
+    paddingTop: 24,
     textAlign: 'center',
-    color: '#7f8c8d',
-    fontSize: '0.9rem',
+    color: '#94a3b8',
+    fontSize: '0.875rem',
   },
+  body: { color: '#94a3b8', lineHeight: 1.7 },
 }));
 
 const Footer = () => {
@@ -40,30 +53,31 @@ const Footer = () => {
       <Container maxWidth="lg">
         <Grid container spacing={4}>
           <Grid item xs={12} md={4}>
-            <Typography variant="h6" className={classes.heading}>Tomato Doctor</Typography>
-            <Typography variant="body2" style={{ color: '#bdc3c7' }}>
-              Advanced AI-powered tool for detecting tomato plant diseases instantly. Helping farmers saving crop and increase yield.
+            <Typography variant="h6" component="p" className={classes.heading}>CropGuard AI</Typography>
+            <Typography variant="body2" className={classes.body}>
+              Production-grade crop disease detection using ResNet50, OpenCV, TensorFlow, and FastAPI.
             </Typography>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" className={classes.heading}>Quick Links</Typography>
-            <a href="/" className={classes.link}>Home</a>
-            <a href="/detect" className={classes.link}>Detect Disease</a>
-            <a href="/about" className={classes.link}>About</a>
-            <a href="/contact" className={classes.link}>Contact</a>
+          <Grid item xs={12} sm={6} md={4}>
+            <Typography variant="h6" component="p" className={classes.heading}>Quick Links</Typography>
+            <nav aria-label="Footer navigation">
+              {LINKS.map((l) => (
+                <Link key={l.to} to={l.to} className={classes.link}>{l.label}</Link>
+              ))}
+            </nav>
           </Grid>
-          <Grid item xs={12} md={4}>
-            <Typography variant="h6" className={classes.heading}>Tech Stack</Typography>
-            <Typography variant="body2" style={{ color: '#bdc3c7' }}>
-              • React.js Frontend<br />
-              • TensorFlow / CNN Model<br />
-              • FastAPI Backend<br />
-              • Google Cloud Platform
+          <Grid item xs={12} sm={6} md={4}>
+            <Typography variant="h6" component="p" className={classes.heading}>Tech Stack</Typography>
+            <Typography variant="body2" className={classes.body} component="ul" style={{ margin: 0, paddingLeft: 18 }}>
+              <li>React.js Frontend</li>
+              <li>ResNet50 / TensorFlow / Keras</li>
+              <li>OpenCV Preprocessing</li>
+              <li>FastAPI Backend</li>
             </Typography>
           </Grid>
         </Grid>
         <Box className={classes.copy}>
-          &copy; {new Date().getFullYear()} Tomato Disease Detection. Research Project.
+          &copy; {new Date().getFullYear()} AI-Based Crop Disease Detection
         </Box>
       </Container>
     </footer>

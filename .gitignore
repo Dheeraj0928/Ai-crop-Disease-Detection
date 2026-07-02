@@ -1,6 +1,36 @@
-.vscode
-.pycharm
-__pycache__
-.idea
-.ipynb_checkpoints
-node_modules
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+*.log
+.pytest_cache/
+
+# IDE
+.vscode/
+.pycharm/
+.idea/
+.ipynb_checkpoints/
+
+# Node
+node_modules/
+web-page/build/
+
+# Training outputs (keep models/ tracked)
+outputs/
+*.csv
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Legacy model name (use crop-disease-model.h5)
+models/tomato-disease-detection-model.h5
+
+# Temp
+web-page/npm_status.txt
+web-page/start.log
+apis/local/install_status.txt
+apis/local/server.log

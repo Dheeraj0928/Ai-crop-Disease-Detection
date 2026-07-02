@@ -1,76 +1,112 @@
-import React from 'react';
-import { Container, Typography, makeStyles, TextField, Button, Grid, Paper } from '@material-ui/core';
+import React, { useState } from 'react';
+import {
+  Typography, TextField, Button, Paper, Snackbar, makeStyles,
+} from '@material-ui/core';
+import PageLayout from '../components/PageLayout';
+import PageHeader from '../components/PageHeader';
+import { tokens } from '../theme';
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: '60px 0',
-  },
-  title: {
-    fontWeight: 800,
-    marginBottom: '20px',
-    color: '#2c3e50',
-    textAlign: 'center',
-  },
+const useStyles = makeStyles(() => ({
   paper: {
-      padding: '40px',
-      borderRadius: '20px',
-      maxWidth: '600px',
-      margin: '0 auto',
-      boxShadow: '0 10px 30px rgba(0,0,0,0.05)',
+    padding: tokens.spacing.card,
+    borderRadius: tokens.radius.xl,
+    maxWidth: 560,
+    margin: '0 auto',
+    border: `1px solid ${tokens.colors.border}`,
+    boxShadow: tokens.shadow.md,
   },
-  input: {
-      marginBottom: '20px',
+  field: { marginBottom: 20 },
+  hint: {
+    textAlign: 'center',
+    color: tokens.colors.textMuted,
+    fontSize: '0.875rem',
+    marginTop: 16,
   },
-  submitBtn: {
-      background: '#2ecc71',
-      color: 'white',
-      padding: '12px 30px',
-      fontWeight: 700,
-      borderRadius: '50px',
-      '&:hover': {
-          background: '#27ae60',
-      },
-  }
 }));
 
 const Contact = () => {
   const classes = useStyles();
+  const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const [errors, setErrors] = useState({});
+  const [sent, setSent] = useState(false);
+
+  const validate = () => {
+    const e = {};
+    if (!form.name.trim()) e.name = 'Name is required';
+    if (!form.email.trim()) e.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) e.email = 'Enter a valid email';
+    if (!form.message.trim()) e.message = 'Message is required';
+    setErrors(e);
+    return Object.keys(e).length === 0;
+  };
+
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+    if (!validate()) return;
+    setSent(true);
+    setForm({ name: '', email: '', message: '' });
+  };
 
   return (
-    <Container maxWidth="md" className={classes.root}>
-      <Typography variant="h3" className={classes.title}>Contact Us</Typography>
-      <Typography variant="body1" align="center" style={{marginBottom: 40, color: '#666'}}>
-          Have questions or want to collaborate? Reach out to us!
-      </Typography>
+    <PageLayout maxWidth="md" id="main-content">
+      <PageHeader
+        title="Contact Us"
+        subtitle="Questions, feedback, or collaboration — we'd love to hear from you."
+      />
 
-      <Paper className={classes.paper}>
-        <form noValidate autoComplete="off">
-            <TextField 
-                fullWidth 
-                label="Your Name" 
-                variant="outlined" 
-                className={classes.input}
-            />
-            <TextField 
-                fullWidth 
-                label="Email Address" 
-                variant="outlined" 
-                className={classes.input}
-            />
-            <TextField 
-                fullWidth 
-                label="Message" 
-                variant="outlined" 
-                multiline
-                rows={4}
-                className={classes.input}
-            />
-            <Button variant="contained" className={classes.submitBtn} fullWidth>
-                Send Message
-            </Button>
-        </form>
+      <Paper className={classes.paper} component="form" elevation={0} onSubmit={handleSubmit} noValidate>
+        <TextField
+          fullWidth
+          label="Your Name"
+          variant="outlined"
+          className={classes.field}
+          value={form.name}
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
+          error={!!errors.name}
+          helperText={errors.name}
+          inputProps={{ 'aria-required': true }}
+        />
+        <TextField
+          fullWidth
+          label="Email Address"
+          type="email"
+          variant="outlined"
+          className={classes.field}
+          value={form.email}
+          onChange={(e) => setForm({ ...form, email: e.target.value })}
+          error={!!errors.email}
+          helperText={errors.email}
+          inputProps={{ 'aria-required': true }}
+        />
+        <TextField
+          fullWidth
+          label="Message"
+          variant="outlined"
+          multiline
+          rows={4}
+          className={classes.field}
+          value={form.message}
+          onChange={(e) => setForm({ ...form, message: e.target.value })}
+          error={!!errors.message}
+          helperText={errors.message}
+          inputProps={{ 'aria-required': true }}
+        />
+        <Button type="submit" variant="contained" color="primary" fullWidth size="large">
+          Send Message
+        </Button>
+        <Typography className={classes.hint}>
+          Or email directly: dk.2.yadav28@gmail.com
+        </Typography>
       </Paper>
-    </Container>
+
+      <Snackbar
+        open={sent}
+        autoHideDuration={5000}
+        onClose={() => setSent(false)}
+        message="Message received! We'll get back to you soon."
+        ContentProps={{ role: 'status', 'aria-live': 'polite' }}
+      />
+    </PageLayout>
   );
 };
 
